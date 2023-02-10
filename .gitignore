@@ -1,3 +1,5 @@
 
 .DS_Store
 __pycache__/data.cpython-310.pyc
+.ipynb_checkpoints/project_01_instructions-checkpoint.ipynb
+project_01_instructions.ipynb
