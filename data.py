@@ -140,7 +140,9 @@ class Data:
             NOTE: This should be a COPY, not the data stored here itself.
             This can be accomplished with numpy's copy function.
         '''
-        pass
+
+        copy = np.copy(self.data)
+        return copy
 
     def head(self):
         '''Return the 1st five data samples (all variables)
@@ -151,7 +153,15 @@ class Data:
         -----------
         ndarray. shape=(5, num_vars). 1st five data samples.
         '''
-        pass
+        samples = []
+        dataRange = self.get_num_samples()
+
+        for i in range(5):
+            if i > dataRange - 1:
+                break
+            samples.append(self.get_sample(i))
+        
+        return np.array(samples)
 
     def tail(self):
         '''Return the last five data samples (all variables)
@@ -162,7 +172,23 @@ class Data:
         -----------
         ndarray. shape=(5, num_vars). Last five data samples.
         '''
-        pass
+        samples = []
+        dataRange = self.get_num_samples()
+
+        if dataRange >= 5:
+            num = self.get_num_samples() - 5
+            for i in range(5):
+                if i > dataRange - 1:
+                    break
+                samples.append(self.get_sample(num+i))
+        
+        else:
+            for i in range(dataRange):
+                if i > dataRange - 1:
+                    break
+                samples.append(self.get_sample(i))
+
+        return np.array(samples)
 
     def limit_samples(self, start_row, end_row):
         '''Update the data so that this `Data` object only stores samples in the contiguous range:
@@ -172,9 +198,10 @@ class Data:
         (Week 2)
 
         '''
-        pass
+        self.data = self.data[start_row: end_row]
+        return
 
-    def select_data(self, headers, rows=[]):
+    def select_data(self, headers, rows=[]): #TODO figure out why this doesn't work
         '''Return data samples corresponding to the variable names in `headers`.
         If `rows` is empty, return all samples, otherwise return samples at the indices specified
         by the `rows` list.
@@ -199,4 +226,15 @@ class Data:
 
         Hint: For selecting a subset of rows from the data ndarray, check out np.ix_
         '''
-        pass
+
+        dataSamples = []
+        nRows = self.get_num_samples()
+        headerIdx = self.get_header_indices(headers)
+
+        if len(rows) > 0:
+            dataSamples.append(self.data[np.ix_(rows, headerIdx)])
+        '''
+        else:
+            dataSamples.append(self.data[np.ix_(self.data.shape[0], headerIdx)])
+        '''
+        return dataSamples
