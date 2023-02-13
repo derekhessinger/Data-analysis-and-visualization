@@ -30,7 +30,7 @@ class Analysis:
         -----------
         data: Data object. Contains all data samples and variables in a dataset.
         '''
-        pass
+        self.data = data
 
     def min(self, headers, rows=[]):
         '''Computes the minimum of each variable in `headers` in the data object.
@@ -52,7 +52,14 @@ class Analysis:
 
         NOTE: There should be no loops in this method!
         '''
-        pass
+
+        minArr = [] # create an empty list to hold the data
+
+        vData = self.data.select_data(headers, rows)    # use select_data to grab variable data
+        minArr = np.amin(vData, axis=0)     # use amin to find the minimum value in each column
+        minArr = np.array(minArr)       # turn the list into an np array
+
+        return minArr
 
     def max(self, headers, rows=[]):
         '''Computes the maximum of each variable in `headers` in the data object.
@@ -73,7 +80,13 @@ class Analysis:
 
         NOTE: There should be no loops in this method!
         '''
-        pass
+        maxArr = [] # create an empty list to hold the data
+
+        vData = self.data.select_data(headers, rows)    # use select_data to grab variable data
+        maxArr = np.amax(vData, axis=0)     # use amax to find the maximum value in each column
+        maxArr = np.array(maxArr)       # turn the list into an np array
+
+        return maxArr
 
     def range(self, headers, rows=[]):
         '''Computes the range [min, max] for each variable in `headers` in the data object.
@@ -96,7 +109,8 @@ class Analysis:
 
         NOTE: There should be no loops in this method!
         '''
-        pass
+        dataRange = [self.min(headers, rows), self.max(headers, rows)] # use min and max functions to return list of ranges
+        return dataRange
 
     def mean(self, headers, rows=[]):
         '''Computes the mean for each variable in `headers` in the data object.
@@ -118,7 +132,13 @@ class Analysis:
         NOTE: You CANNOT use np.mean here!
         NOTE: There should be no loops in this method!
         '''
-        pass
+        
+        sumData = self.data.select_data(headers, rows) # grab the data to be summed up
+        n = sumData.shape[0] # store the number of samples in the data
+        sum = np.sum(sumData, axis=0) # sum all of the entries
+        mean = sum/n # calculate the mean
+        return mean
+
 
     def var(self, headers, rows=[]):
         '''Computes the variance for each variable in `headers` in the data object.
@@ -140,7 +160,17 @@ class Analysis:
         NOTE: You CANNOT use np.var or np.mean here!
         NOTE: There should be no loops in this method!
         '''
-        pass
+
+        meanData = self.data.select_data(headers, rows) # grab data for the mean
+        n = meanData.shape[0] # store the number of samples in the data
+        mean = self.mean(headers, rows) # calculate the mean
+        oneArr = np.ones(meanData.shape) # create an array of ones that is same shape as meanData
+        meanArr = (mean * oneArr) # mulitply mean into oneArr to create array of means
+        diffArr = meanData - mean # subtract mean from mean data to calculate the difference, stored in array
+        sqArr = np.square(diffArr) # square each element in the difference array
+        sumArr = np.sum(sqArr, axis=0) # sum each entry in array
+        var = np.divide(sumArr, n-1) # calculate the variance
+        return var
 
     def std(self, headers, rows=[]):
         '''Computes the standard deviation for each variable in `headers` in the data object.
@@ -162,7 +192,8 @@ class Analysis:
         NOTE: You CANNOT use np.var, np.std, or np.mean here!
         NOTE: There should be no loops in this method!
         '''
-        pass
+
+        return np.sqrt(self.var(headers,rows)) # calculate sqaure root of variance to find standard deviaton
 
     def show(self):
         '''Simple wrapper function for matplotlib's show function.
