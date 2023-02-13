@@ -201,7 +201,7 @@ class Data:
         self.data = self.data[start_row: end_row]
         return
 
-    def select_data(self, headers, rows=[]): #TODO figure out why this doesn't work
+    def select_data(self, headers, rows=[]): 
         '''Return data samples corresponding to the variable names in `headers`.
         If `rows` is empty, return all samples, otherwise return samples at the indices specified
         by the `rows` list.
@@ -228,13 +228,14 @@ class Data:
         '''
 
         dataSamples = []
-        nRows = self.get_num_samples()
         headerIdx = self.get_header_indices(headers)
 
         if len(rows) > 0:
             dataSamples.append(self.data[np.ix_(rows, headerIdx)])
-        '''
+        
         else:
-            dataSamples.append(self.data[np.ix_(self.data.shape[0], headerIdx)])
-        '''
+            dataSamples.append(self.data[np.ix_(np.arange(self.data.shape[0]), headerIdx)])
+        
+        dataSamples = np.array(dataSamples)
+        dataSamples = np.squeeze(dataSamples, axis = 0)
         return dataSamples
