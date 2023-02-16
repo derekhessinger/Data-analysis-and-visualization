@@ -105,6 +105,10 @@ class Data:
     def get_headers(self):
        return self.headers
 
+    '''Method to set headers'''
+    def set_headers(self, headers):
+        self.headers = headers
+
     '''Method to return mappings of headers to indices in data'''
     def get_mappings(self):
         return self.header2col
