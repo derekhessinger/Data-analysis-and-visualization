@@ -1,6 +1,6 @@
 '''analysis.py
 Run statistical analyses and plot Numpy ndarray data
-YOUR NAME HERE
+Derek Hessinger
 CS 251 Data Analysis Visualization
 Spring 2023
 '''
@@ -225,7 +225,21 @@ class Analysis:
 
         NOTE: Do not call plt.show() here.
         '''
-        pass
+        headers = [ind_var, dep_var]
+        self.data.set_headers(headers)
+        rows = []
+
+        plotData = self.data.select_data(headers, rows)
+        x = plotData[:,0]
+        y = plotData[:,1]
+
+        plt.scatter(plotData[:,0], plotData[:,1])
+        plt.title(title)
+        plt.xlabel(ind_var)
+        plt.ylabel(dep_var)
+
+        return x, y
+
 
     def pair_plot(self, data_vars, fig_sz=(12, 12), title=''):
         '''Create a pair plot: grid of scatter plots showing all combinations of variables in
@@ -258,4 +272,6 @@ class Analysis:
         Because variables may have different ranges, pair plot columns usually share the same
         x axis and rows usually share the same y axis.
         '''
+        num_of_subplots = len(data_vars) * len(data_vars)
+        
         pass
