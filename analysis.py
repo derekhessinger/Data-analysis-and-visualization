@@ -200,7 +200,7 @@ class Analysis:
 
         (Does not require modification)
         '''
-        plt.show()
+        plt.show()  # show the plot
 
     def scatter(self, ind_var, dep_var, title):
         '''Creates a simple scatter plot with "x" variable in the dataset `ind_var` and
@@ -225,18 +225,18 @@ class Analysis:
 
         NOTE: Do not call plt.show() here.
         '''
-        headers = [ind_var, dep_var]
-        self.data.set_headers(headers)
-        rows = []
+        headers = [ind_var, dep_var]    # get list of independent and dependent variables as headers
+        self.data.set_headers(headers)  # set self.headers to headers passed
+        rows = []   # empty list to select all rows
 
-        plotData = self.data.select_data(headers, rows)
-        x = plotData[:,0]
-        y = plotData[:,1]
+        plotData = self.data.select_data(headers, rows) # grab data for plots
+        x = plotData[:,0]   # store data from all rows in first column in x
+        y = plotData[:,1]   # store data from all rows in second column in y 
 
-        plt.scatter(plotData[:,0], plotData[:,1])
-        plt.title(title)
-        plt.xlabel(ind_var)
-        plt.ylabel(dep_var)
+        plt.scatter(plotData[:,0], plotData[:,1])    # plot scatter plot with x and y
+        plt.title(title)    # create title with title passed
+        plt.xlabel(ind_var) # set x label to ind_var
+        plt.ylabel(dep_var) # set y label to dep_var
 
         return x, y
 
@@ -272,6 +272,28 @@ class Analysis:
         Because variables may have different ranges, pair plot columns usually share the same
         x axis and rows usually share the same y axis.
         '''
-        num_of_subplots = len(data_vars) * len(data_vars)
+
+        fig, axes = plt.subplots(len(data_vars), len(data_vars), sharex=True, sharey=True, figsize = fig_sz) # create subplots
+
+        plotData = self.data.select_data(data_vars) # select the appropriate data from data_vars
+
+        for i in range(len(data_vars)): # begin nested loop to iterate through all possible variable combinations
+            
+            for j in range(len(data_vars)):
+                
+                axes[i,j].scatter(plotData[:,i], plotData[:,j]) # create a scatter plot of the data
+
+                if i==len(data_vars)-1: # if the plot is on the bottom row, add a label to y axis
+
+                    axes[i,j].set_xlabel(data_vars[j])
+
+                if j==0:    # if the plot is on the first column, add a label to x axis
+                    
+                    axes[i,j].set_ylabel(data_vars[i])
+
+        plt.subplots_adjust(left=0, bottom=0, right=1.0, top=1.0, wspace=0.5, hspace=0.5)   # adjust spacing of subplots
         
-        pass
+        plt.xticks([],[])   # pass empty sets to xticks so none are present in plots
+        plt.yticks([],[])   # pass empty sets to yticks so none are present in plots
+
+        return fig, axes
