@@ -293,7 +293,7 @@ class Analysis:
 
         plt.subplots_adjust(left=0, bottom=0, right=1.0, top=1.0, wspace=0.5, hspace=0.5)   # adjust spacing of subplots
         
-        plt.xticks([],[])   # pass empty sets to xticks so none are present in plots
-        plt.yticks([],[])   # pass empty sets to yticks so none are present in plots
+        #plt.xticks([],[])   # pass empty sets to xticks so none are present in plots
+        #plt.yticks([],[])   # pass empty sets to yticks so none are present in plots
 
         return fig, axes
